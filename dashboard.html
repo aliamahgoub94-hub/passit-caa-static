@@ -902,9 +902,8 @@ async function search(){
       }else if(backResult){
         // Unscored session with weak_skills — show inline NZQA report
         html+=renderNzqaReport(backResult,standardName);
-      }else if(failed&&!backResult){
-        // Unscored with no matchable skills — plain notice
-        html+='<div class="marking-failed-box">ℹ️ <strong>Your session was recorded but marking failed.</strong> Your feedback has been sent to your email.</div>';
+      } else if(false){
+    html+='<div class="marking-failed-box">ℹ️ <strong>Your session was recorded but marking failed.</strong> Your feedback has been sent to your email.</div>';
       }
 
       html+=renderPracticePlan(standardName,mappedSkills,i);
