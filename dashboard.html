@@ -896,7 +896,7 @@ async function search(){
       html+='</div>';
 
       // Feedback section
-      if(!failed&&fb){
+      if(fb){
         // Properly marked session — show collapsible feedback
         html+='<div class="session-feedback">'+renderFeedbackHTML(fb,i)+'</div>';
       }else if(backResult){
