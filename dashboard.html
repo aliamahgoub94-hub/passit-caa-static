@@ -182,9 +182,6 @@ nav{
 .nzqa-crit-item.is-amber{
   background:#fdf9ee;border-color:rgba(214,137,16,.25);
 }
-.nzqa-crit-item.is-pending{
-  background:#f7f9fc;border-color:var(--border);
-}
 
 .nzqa-crit-row{
   display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;
@@ -306,7 +303,7 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
     <a href="feedback-report.html" class="nav-link">My Feedback</a>
     <a href="parent-dashboard.html" class="nav-link">Parent View</a>
   </div>
-  <a href="simulator-pro.html" class="nav-cta">Start Practising &rarr;</a>
+  <a href="simulator-pro.html" class="nav-cta">Start Practising →</a>
 </nav>
 
 <section class="hero">
@@ -322,15 +319,15 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
 </div>
 
 <div class="main-area">
-  <div class="loading" id="loading"><div class="spinner"></div><p>Loading sessions&hellip;</p></div>
+  <div class="loading" id="loading"><div class="spinner"></div><p>Loading sessions…</p></div>
 
   <div class="summary" id="summary">
     <div class="summary-row">
       <div class="meta"><strong id="meta-count">0</strong> sessions</div>
-      <div class="meta">Date range: <strong id="meta-range">&mdash;</strong></div>
-      <div class="meta">Student: <strong id="meta-email">&mdash;</strong></div>
+      <div class="meta">Date range: <strong id="meta-range">—</strong></div>
+      <div class="meta">Student: <strong id="meta-email">—</strong></div>
       <button class="feedback-report-btn" id="feedback-report-btn" onclick="showFeedbackReport()">
-        View My Feedback Report &rarr;
+        View My Feedback Report →
       </button>
     </div>
   </div>
@@ -340,32 +337,32 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
     <div class="inline-fb-head">
       <div>
         <div class="inline-fb-eyebrow">NZQA Skill Gap Report</div>
-        <div class="inline-fb-title">Here&rsquo;s what your practice sessions showed</div>
+        <div class="inline-fb-title">Where your marks are slipping</div>
         <div class="inline-fb-sub">
-          Back-engineered from the skills recorded in your unscored sessions &mdash;
+          Back-engineered from the skills recorded in your unscored sessions —
           every area the marker flagged, explained in plain language.
         </div>
       </div>
-      <button class="inline-fb-close" onclick="hideFeedbackReport()">&times; Close</button>
+      <button class="inline-fb-close" onclick="hideFeedbackReport()">✕ Close</button>
     </div>
     <div class="inline-fb-body">
       <div class="inline-fb-loading" id="fb-loading">
-        <div class="spinner"></div><p>Fetching your feedback&hellip;</p>
+        <div class="spinner"></div><p>Fetching your feedback…</p>
       </div>
       <div id="fb-report-list"></div>
       <div class="inline-fb-state" id="fb-state-allgood">
-        <span class="inline-fb-state-icon">&#127881;</span>
+        <span class="inline-fb-state-icon">🎉</span>
         <div class="inline-fb-state-title">All your sessions have been scored!</div>
         <div class="inline-fb-state-body">
-          No unscored sessions found &mdash; your feedback is already showing in the session cards below.
+          No unscored sessions found — your feedback is already showing in the session cards below.
         </div>
       </div>
       <div class="inline-fb-state" id="fb-state-noskills">
-        <span class="inline-fb-state-icon">&#128203;</span>
+        <span class="inline-fb-state-icon">📋</span>
         <div class="inline-fb-state-title">No skill data to work from</div>
         <div class="inline-fb-state-body">
-          Your unscored sessions don&rsquo;t have enough skill data recorded to generate feedback.
-          <a href="simulator-pro.html">Complete another practice session &rarr;</a>
+          Your unscored sessions don't have enough skill data recorded to generate feedback.
+          <a href="simulator-pro.html">Complete another practice session →</a>
         </div>
       </div>
     </div>
@@ -374,13 +371,13 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
   <div id="sessions-list"></div>
 
   <div class="empty" id="empty">
-    <span class="empty-icon">&#128221;</span>
+    <span class="empty-icon">📝</span>
     <div class="empty-title" id="empty-title">No sessions found</div>
-    <div class="empty-body" id="empty-body">No sessions found for this email. Complete a practice session in the simulator first.<br><a href="simulator-pro.html">Start a new session &rarr;</a></div>
+    <div class="empty-body" id="empty-body">No sessions found for this email. Complete a practice session in the simulator first.<br><a href="simulator-pro.html">Start a new session →</a></div>
   </div>
 
   <div id="sim-link-wrap" style="display:none;text-align:center;margin-top:20px">
-    <a href="simulator-pro.html" class="sim-link">Start a new session &rarr;</a>
+    <a href="simulator-pro.html" class="sim-link">Start a new session →</a>
   </div>
 </div>
 
@@ -389,7 +386,7 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
     <div class="footer-top">
       <div>
         <a href="index.html" class="footer-logo">pass<em>it</em></a>
-        <p class="footer-tagline">NCEA co-requisite preparation for NZ students, parents and wh&#257;nau.</p>
+        <p class="footer-tagline">NCEA co-requisite preparation for NZ students, parents and whānau.</p>
       </div>
       <div class="footer-links">
         <div>
@@ -401,7 +398,7 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
         <div>
           <div class="footer-col-title">Resources</div>
           <a href="https://ncea.education.govt.nz" target="_blank" class="footer-link">ncea.education.govt.nz</a>
-          <a href="https://www2.nzqa.govt.nz/ncea/subjects/litnum/" target="_blank" class="footer-link">NZQA Literacy &amp; Numeracy</a>
+          <a href="https://www2.nzqa.govt.nz/ncea/subjects/litnum/" target="_blank" class="footer-link">NZQA Literacy & Numeracy</a>
         </div>
         <div>
           <div class="footer-col-title">Company</div>
@@ -412,7 +409,7 @@ footer{background:var(--navy-dark,#0a1880);color:rgba(255,255,255,.5);padding:48
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-copy">&copy; 2026 Passit. All rights reserved.</div>
+      <div class="footer-copy">© 2026 Passit. All rights reserved.</div>
       <div class="footer-disclaimer">Questions are based on published NZQA achievement criteria. Passit is an independent preparation tool and is not affiliated with NZQA or the Ministry of Education.</div>
     </div>
   </div>
@@ -438,20 +435,20 @@ const SKILL_GROUPS=[
 ];
 
 // ── NZQA-aligned feedback lookup (back-engineered report) ──────
-// Each entry: triggers (string[] for partial matching), title, feedback, color ('red'|'amber'), score
+// Each entry: triggers (string[] for matching), title, feedback, color ('red'|'amber'), score
 const FEEDBACK_LOOKUP=[
 
   // ── Writing (US32405) ─────────────────────────────────────────
   {
-    triggers:['tone','word','email','customer','workplace','communication'],
+    triggers:['customer communication','business email','workplace email','formal language','audience and purpose'],
     title:'Your tone and word choices',
-    feedback:'The marker checks whether your writing sounds right for the situation. Swap casual words: get→obtain, tell→inform, need→require, fix→resolve. Read it back — would you say this out loud in a workplace?',
+    feedback:'The marker checks whether your writing sounds right for the situation. Swap casual words: get → obtain, tell → inform, need → require. Read it back — would you say this in a workplace?',
     color:'red', score:40
   },
   {
-    triggers:['procedural','sequential','instructions','flow'],
+    triggers:['procedural instructions','sequential instructions','paragraph structure','text structure'],
     title:'How your writing flows',
-    feedback:'Use linking words: First, Then, Next, After that, Finally. One idea per step. Could someone follow this without asking questions?',
+    feedback:'Use linking words: First, Then, Next, Finally. One idea per step. Could someone follow this without asking questions?',
     color:'amber', score:50
   },
   {
@@ -463,21 +460,21 @@ const FEEDBACK_LOOKUP=[
 
   // ── Reading (US32403) ─────────────────────────────────────────
   {
-    triggers:['locating','specific','finding','information'],
+    triggers:['locating specific information','locating multiple pieces','main idea'],
     title:'Finding the right information',
-    feedback:'Go back and find the exact sentence that answers the question. The answer is always directly in the text.',
+    feedback:'The marker checks whether you can identify exactly where the answer is in the text. Go back and find the specific sentence or phrase that answers the question — the information is always directly there.',
     color:'red', score:40
   },
   {
-    triggers:['purpose','author','intent','why'],
+    triggers:['understanding purpose','author intent','author purpose','identifying bias'],
     title:'Understanding why the text was written',
-    feedback:'Ask yourself why the author wrote this — to inform, persuade, or instruct? The purpose shapes every word choice.',
+    feedback:'Ask yourself why the author wrote this. Is it to inform, persuade, or instruct? The purpose shapes every word choice.',
     color:'amber', score:50
   },
   {
-    triggers:['inference','interpret','meaning','between'],
+    triggers:['interpreting meaning','inference','comparing texts'],
     title:'Reading between the lines',
-    feedback:'Look for clues in word choices and tone. The marker checks whether you understand what the text implies, not just what it says.',
+    feedback:'The marker checks whether you understand what the text implies, not just what it says. Look for clues in word choices and tone.',
     color:'red', score:40
   },
   {
@@ -489,27 +486,27 @@ const FEEDBACK_LOOKUP=[
 
   // ── Numeracy (US32406) ────────────────────────────────────────
   {
-    triggers:['measurement','unit','conversion','convert'],
+    triggers:['unit conversion','measurement','unit conversion cm³ to litres','volume calculation'],
     title:'Converting measurements',
-    feedback:'Write down what you are converting from and to before you calculate. cm÷100=m, g÷1000=kg, mL÷1000=L. Show every step.',
+    feedback:'Write down what you are converting from and to before you calculate. cm÷100 = m, g÷1000 = kg, mL÷1000 = L. Show every step.',
     color:'red', score:40
   },
   {
-    triggers:['gst','percentage','percent'],
+    triggers:['gst','gst calculations','percentages','percentage calculations'],
     title:'Percentages and GST',
-    feedback:'For GST: multiply by 1.15 to add it, divide by 1.15 to remove it. Write the formula before you calculate.',
+    feedback:'For GST: multiply by 1.15 to add it, divide by 1.15 to remove it. For percentages: write the formula before you calculate.',
     color:'amber', score:50
   },
   {
-    triggers:['rate','ratio','speed','timetable','time'],
+    triggers:['speed','rates','rate and reasonableness','time calculations','timetable reading','ratios and proportions'],
     title:'Rates and ratios',
-    feedback:'Read the question twice. Write down what you know and what you need to find before you start. Check your units match.',
+    feedback:'Read the question twice. Write down what you know and what you need to find before you start calculating. Check your units match.',
     color:'red', score:40
   },
   {
-    triggers:['budget','money','total','cost','price'],
+    triggers:['budgeting','money','totals','addition','subtraction'],
     title:'Working with money',
-    feedback:'Set up the calculation before you start. Check whether the question asks for a total, a difference, or a per-item amount.',
+    feedback:'Set up the calculation before you start. Check whether the question is asking for a total, a difference, or a per-item amount.',
     color:'amber', score:50
   },
   {
@@ -660,8 +657,7 @@ function renderFeedbackHTML(fb,idx){
 }
 
 // ── Render NZQA back-engineered feedback report (inline) ───────
-// sessionDate is optional ISO string; included in the sub-heading when provided
-function renderNzqaReport(result, standardName, sessionDate){
+function renderNzqaReport(result, standardName){
   if(!result||!result.matched||!result.matched.length) return '';
 
   const stdLabels={
@@ -672,19 +668,16 @@ function renderNzqaReport(result, standardName, sessionDate){
   const stdLabel=stdLabels[standardName]||standardName;
 
   const redCount=result.matched.filter(m=>m.color==='red').length;
-  const overallBadge=redCount>=2?'Gaps to close':'Worth practising';
-
-  const dateStr=sessionDate?fmtDate(sessionDate):'';
-  const subLine=dateStr?esc(stdLabel)+' · '+esc(dateStr):esc(stdLabel);
+  const overallBadge=redCount>=2?'Gaps to close':'Almost there';
 
   let html='<div class="nzqa-report">';
 
   // Header
   html+='<div class="nzqa-report-head">';
   html+='<div class="nzqa-report-left">';
-  html+='<div class="nzqa-report-eyebrow">NZQA Feedback Report</div>';
-  html+='<div class="nzqa-report-title">Here’s what your practice session showed</div>';
-  html+='<div class="nzqa-report-sub">'+subLine+' — work through each area below before your next attempt.</div>';
+  html+='<div class="nzqa-report-eyebrow">NZQA Feedback Report — '+esc(stdLabel)+'</div>';
+  html+='<div class="nzqa-report-title">Where your marks are slipping</div>';
+  html+='<div class="nzqa-report-sub">Based on the skills you practised in this session. Work through each area below before your next attempt.</div>';
   html+='</div>';
   html+='<span class="nzqa-report-badge">'+esc(overallBadge)+'</span>';
   html+='</div>';
@@ -694,7 +687,7 @@ function renderNzqaReport(result, standardName, sessionDate){
   result.matched.forEach(entry=>{
     const colorCls='is-'+entry.color;
     const badgeCls='nzqa-badge-'+entry.color;
-    const badgeLabel=entry.color==='red'?'Needs work':'Worth practising';
+    const badgeLabel=entry.color==='red'?'Needs work':'Almost there';
     html+='<div class="nzqa-crit-item '+colorCls+'">';
     html+='<div class="nzqa-crit-row">';
     html+='<span class="nzqa-crit-name">'+esc(entry.title)+'</span>';
@@ -709,34 +702,6 @@ function renderNzqaReport(result, standardName, sessionDate){
   const focusedOn=result.matched.map(m=>m.title).join(', ');
   html+='<div class="nzqa-overall"><strong>What to do next:</strong> Focus on '+esc(focusedOn)+'. Each session you complete builds your skills toward the 5 credits you need.</div>';
 
-  html+='</div>';
-  return html;
-}
-
-// ── Render a pending NZQA card (no matchable weak_skills yet) ──
-function renderNzqaPending(standardName, sessionDate){
-  const stdLabels={
-    'Writing':'US32405 — Writing',
-    'Reading':'US32403 — Reading',
-    'Numeracy':'US32406 — Numeracy'
-  };
-  const stdLabel=stdLabels[standardName]||standardName;
-  const dateStr=sessionDate?fmtDate(sessionDate):'';
-  const subLine=dateStr?esc(stdLabel)+' · '+esc(dateStr):esc(stdLabel);
-
-  let html='<div class="nzqa-report">';
-  html+='<div class="nzqa-report-head">';
-  html+='<div class="nzqa-report-left">';
-  html+='<div class="nzqa-report-eyebrow">NZQA Feedback Report</div>';
-  html+='<div class="nzqa-report-title">Here’s what your practice session showed</div>';
-  html+='<div class="nzqa-report-sub">'+subLine+'</div>';
-  html+='</div>';
-  html+='</div>';
-  html+='<div class="nzqa-criteria-list">';
-  html+='<div class="nzqa-crit-item is-pending">';
-  html+='<p class="nzqa-tip">We’re reviewing your session — your feedback will appear here shortly.</p>';
-  html+='</div>';
-  html+='</div>';
   html+='</div>';
   return html;
 }
@@ -756,7 +721,7 @@ function renderPracticePlan(standardName,mappedSkills,idx){
   }
 
   let h='<div class="practice-plan-card">';
-  h+='<button class="plan-toggle" onclick="togglePlan('+idx+')">&#128203; Your 45-minute practice plan &#9660;</button>';
+  h+='<button class="plan-toggle" onclick="togglePlan('+idx+')">📋 Your 45-minute practice plan ▾</button>';
   h+='<div class="plan-body" id="plan-'+idx+'">';
   h+='<div class="plan-step"><div class="plan-time">0–10 min: Warm-up</div><p class="plan-desc">'+plan.warmup+'</p></div>';
   h+='<div class="plan-step"><div class="plan-time">10–30 min: Focused practice</div><p class="plan-desc">'+focusedDesc+'</p></div>';
@@ -845,7 +810,7 @@ async function fetchFeedbackReport(email){
       html+='<span class="chip '+chipCls+'">'+esc(standardName)+'</span>';
       html+='<span class="session-date">'+esc(s.session_date?fmtDate(s.session_date):'—')+'</span>';
       html+='</div>';
-      html+=renderNzqaReport(result,standardName,s.session_date);
+      html+=renderNzqaReport(result,standardName);
       html+='</div>';
       list.insertAdjacentHTML('beforeend',html);
     });
@@ -942,10 +907,10 @@ async function search(){
         html+='<div class="session-feedback">'+renderFeedbackHTML(fb,i)+'</div>';
       }else if(backResult){
         // Unscored session with weak_skills — show inline NZQA report
-        html+=renderNzqaReport(backResult,standardName,s.session_date);
-      }else if(failed){
-        // Unscored with no matchable skills — show styled NZQA pending card
-        html+=renderNzqaPending(standardName,s.session_date);
+        html+=renderNzqaReport(backResult,standardName);
+      }else if(failed&&!backResult){
+        // Unscored with no matchable skills — plain notice
+        html+='<div class="marking-failed-box">ℹ️ <strong>Your session was recorded but marking failed.</strong> Your feedback has been sent to your email.</div>';
       }
 
       html+=renderPracticePlan(standardName,mappedSkills,i);
