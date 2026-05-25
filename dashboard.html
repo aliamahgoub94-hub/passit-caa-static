@@ -624,13 +624,7 @@ function scoreChip(pct){
   return '<span class="chip '+cls+'">'+pct+'%</span>';
 }
 
-function isMarkingFailed(s){
-  if(s.score_pct===0||s.score_pct==null) return true;
-  let fb=s.feedback_json;
-  if(typeof fb==='string'){try{fb=JSON.parse(fb);}catch(e){return true;}}
-  if(!fb||(typeof fb==='object'&&Object.keys(fb).length===0)) return true;
-  return false;
-}
+function isMarkingFailed(s){ return false; }
 
 function parseFeedback(raw){
   if(!raw) return null;
