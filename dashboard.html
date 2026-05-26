@@ -531,385 +531,48 @@ const FEEDBACK_LOOKUP=[
 
 // ── Back-engineer feedback from weak_skills ───────────────────
 function backEngineerFeedback(weakSkills, standard){
-  if(!Array.isArray(weakSkills)||!weakSkills.length) return null;
-  const matched=[];
-  const seen=new Set();
-  weakSkills.forEach(raw=>{
-    const k=String(raw||'').trim().toLowerCase();
-    if(!k) return;
-    for(const entry of FEEDBACK_LOOKUP){
-      if(seen.has(entry.title)) continue;
-      for(const t of entry.triggers){
-        if(k.includes(t)||t.includes(k)){
-          seen.add(entry.title);
-          matched.push(entry);
+    if(!Array.isArray(weakSkills)||!weakSkills.length) return null;
+    const SKILL_FEEDBACK={
+      "gst & percentages":{title:"Working with percentages",feedback:"Percentages appear in GST, discounts, and wages. To find 15% multiply by 0.15. Always show your working.",color:"red"},
+      "addition & subtraction":{title:"Number operations",feedback:"Many errors here are calculator input mistakes. Write the equation out before pressing buttons and check your answer makes sense.",color:"amber"},
+      "perimeter and rates":{title:"Rates and measurement",feedback:"Rates questions ask how much per unit. Set them up as fractions: distance divided by time equals speed. Always label your units.",color:"red"},
+      "rates, time, and timetables":{title:"Rates and timetables",feedback:"Read timetable questions carefully. Check AM vs PM and whether the question asks for arrival or departure time.",color:"red"},
+      "measurement and proportions":{title:"Measurement and proportions",feedback:"Proportions compare two quantities. Set them up as equivalent fractions and cross-multiply. Check your units match before you start.",color:"amber"},
+      "speed, distance, time":{title:"Speed, distance, time",feedback:"Use the triangle: Speed equals Distance divided by Time. Cover what you want to find. Check your units match.",color:"red"},
+      "unit conversion":{title:"Unit conversion",feedback:"Write the conversion factor first. 1 km equals 1000 m. Multiply to go from big to small units, divide to go from small to big.",color:"red"},
+      "fractions and decimals":{title:"Fractions and decimals",feedback:"To convert a fraction to a decimal divide the top by the bottom. For percentages multiply by 100.",color:"amber"},
+      "statistics and probability":{title:"Data and probability",feedback:"Read carefully. Count the total outcomes first then the favourable ones. Check if the answer should be a fraction, decimal, or percentage.",color:"amber"},
+      "main idea":{title:"Finding the main idea",feedback:"The main idea is usually in the first or last sentence of a paragraph. Ask: what is this whole text mostly about?",color:"red"},
+      "inference":{title:"Reading between the lines",feedback:"Inference means using clues in the text plus what you know. The answer will not be stated directly. Look for what the author implies.",color:"red"},
+      "vocabulary in context":{title:"Word meaning in context",feedback:"Do not guess from the word alone. Read the whole sentence around it. Eliminate options that do not fit the context.",color:"amber"},
+      "text structure":{title:"How the text is organised",feedback:"Notice signal words: however, therefore, firstly, as a result. These show how ideas connect.",color:"amber"},
+      "purpose and audience":{title:"Purpose and audience",feedback:"Ask who this is written for and why. Formal texts use professional language. The purpose shapes every word choice.",color:"red"},
+      "customer communication":{title:"Tone and word choices",feedback:"Your writing needs to sound professional. Swap casual words: get to obtain, tell to inform, need to require.",color:"red"},
+      "procedural instructions":{title:"How your writing flows",feedback:"Use linking words: First, Then, Next, Finally. One idea per step. Number your steps if the order matters.",color:"amber"},
+      "formal language":{title:"Formal writing style",feedback:"Avoid contractions, slang, and first person unless instructed. Use complete sentences and check your punctuation.",color:"red"}
+    };
+    const matched=[];
+    const seen=new Set();
+    weakSkills.forEach(raw=>{
+      const k=String(raw||"").toLowerCase().trim();
+      if(!k) return;
+      if(SKILL_FEEDBACK[k]&&!seen.has(k)){
+        seen.add(k);
+        matched.push({...SKILL_FEEDBACK[k],name:raw});
+        return;
+      }
+      for(const [key,val] of Object.entries(SKILL_FEEDBACK)){
+        if(seen.has(key)) continue;
+        if(k.includes(key)||key.includes(k)){
+          seen.add(key);
+          matched.push({...val,name:raw});
           break;
         }
       }
-    }
-  });
-  if(!matched.length) return null;
-  const avgScore=Math.round(matched.reduce((a,m)=>a+m.score,0)/matched.length);
-  return {matched, score_pct:avgScore};
-}
-
-// ── Practice plans ────────────────────────────────────────────
-const PRACTICE_PLANS={
-  Reading:{
-    warmup:'Read through a short text (news article, brochure, or email) and highlight the main idea in each paragraph.',
-    focused:{
-      'Your tone and word choices 🔴':'Read two texts on the same topic — one written for teenagers, one for professionals. Note how word choices and tone change for different audiences.',
-      'Checking your work carefully 🟡':'Read a short article and separate facts from opinions. Highlight any biased or misleading language and explain why it might be one-sided.',
-      'Checking if claims are correct 🟡':'Read a short article with claims. For each one, find evidence in the text that supports or contradicts it. Write a sentence explaining your reasoning.',
-      'How your writing flows 🟡':'Read a well-structured article. Identify how the author organises ideas — introduction, supporting points, and conclusion. Note any signal words (firstly, however, finally).',
-      _default:'Choose a text and practice identifying the author’s purpose, the main ideas, and any unfamiliar vocabulary. Write brief notes for each.'
-    },
-    apply:'Read a full passage and write short answers to 3 comprehension questions — focus on using evidence from the text to support your answers.',
-    review:'Re-read your answers. Check that you’ve answered each question fully and used evidence from the text.'
-  },
-  Writing:{
-    warmup:'Write 3 sentences describing your morning. Focus on clear, complete sentences with correct punctuation.',
-    focused:{
-      'Your tone and word choices 🔴':'Write a short reply to a customer who received the wrong order. Focus on polite, professional tone and appropriate language for the audience.',
-      'How your writing flows 🟡':'Write a set of 5 step-by-step instructions for a simple task (e.g. making a cup of tea). Make sure each step follows logically from the last.',
-      'Checking your work carefully 🟡':'Write a short paragraph about your weekend, then proofread it twice. First check spelling and punctuation, then check that each sentence makes sense.',
-      _default:'Write a short email responding to a workplace scenario. Include a greeting, clear body paragraph, and a professional sign-off.'
-    },
-    apply:'Write a full email responding to a scenario — include a greeting, body, and sign-off. Make sure your tone matches the audience and purpose.',
-    review:'Re-read your work. Check spelling, tone, and that you’ve answered the question fully.'
-  },
-  Numeracy:{
-    warmup:'Do 5 quick mental maths questions: try adding and subtracting with decimals, or estimating percentages of everyday prices.',
-    focused:{
-      'Working with numbers and money 🔴':'Calculate GST (15%) on 5 different prices. Then create a simple weekly budget — list income and expenses and check if the budget balances.',
-      'Measurement and proportions 🟡':'Convert between units (e.g. cm to m, mL to L). Then calculate the volume of a box and convert cm³ to litres.',
-      'Reading data and probability 🟡':'Read a bar chart and answer 3 questions about what the data shows. Then place 5 everyday events on a probability scale from impossible to certain.',
-      'Rates, time, and timetables 🟡':'Read a bus timetable and plan a journey with one transfer. Calculate how long each leg takes and the total travel time.',
-      'Direction and angles 🟡':'Use a compass rose to give directions between points on a simple map. Then estimate 3 different angles without using a protractor.',
-      _default:'Work through 5 mixed numeracy problems covering percentages, measurement, and basic calculations. Show your working.'
-    },
-    apply:'Solve a real-world problem: plan a small event budget including GST, timing, and quantities needed for catering.',
-    review:'Re-check your calculations. Make sure units are correct and your answers are reasonable for the real-world context.'
-  }
-};
-
-const $=id=>document.getElementById(id);
-function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
-
-function fmtDate(iso){
-  const d=new Date(iso);
-  return d.toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-}
-
-function mapWeakSkills(rawSkills){
-  if(!Array.isArray(rawSkills)||!rawSkills.length) return ['Looking good ✅'];
-  const matched=new Set();
-  rawSkills.forEach(raw=>{
-    const k=String(raw||'').trim().toLowerCase();
-    if(!k) return;
-    for(const group of SKILL_GROUPS){
-      let hit=false;
-      for(const trigger of group.triggers){
-        if(k.includes(trigger)||trigger.includes(k)){matched.add(group.label);hit=true;break;}
-      }
-      if(hit) break;
-    }
-  });
-  return matched.size?[...matched]:['Looking good ✅'];
-}
-
-function scoreChip(pct){
-  if(pct==null||pct===0) return '<span class="chip chip-gray">—</span>';
-  const cls=pct>=80?'chip-green':pct>=50?'chip-amber':'chip-red';
-  return '<span class="chip '+cls+'">'+pct+'%</span>';
-}
-
-function isMarkingFailed(s){ return false; }
-
-function parseFeedback(raw){
-  if(!raw) return null;
-  if(typeof raw==='string'){try{const p=JSON.parse(raw);return(p&&typeof p==='object')?p:null;}catch(e){return null;}}
-  return(typeof raw==='object')?raw:null;
-}
-
-// ── Render standard feedback (properly marked sessions) ────────
-function renderFeedbackHTML(fb,idx){
-  if(!fb) return '';
-  let html='<button class="fb-toggle" onclick="toggleFb('+idx+')">Show feedback details</button>';
-  html+='<div class="fb-detail" id="fb-'+idx+'">';
-  if(fb.overall) html+='<div style="margin-bottom:12px;font-weight:600;font-size:.95rem;color:var(--ink)">'+esc(fb.overall)+'</div>';
-  if(fb.criteria&&Array.isArray(fb.criteria)&&fb.criteria.length){
-    fb.criteria.forEach(c=>{
-      const cls=c.verdict==='met'?'fb-met':c.verdict==='partial'?'fb-partial':'fb-miss';
-      const label=c.verdict==='met'?'✅ Looking good':c.verdict==='partial'?'🟡 Almost there':'🔴 Needs work';
-      html+='<div class="fb-crit" style="margin-bottom:14px;padding:12px 14px;background:var(--sky);border-radius:10px;border-left:3px solid '+(c.verdict==='met'?'var(--green)':c.verdict==='partial'?'var(--amber)':'var(--red)')+'">';
-      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
-      html+='<span style="font-weight:700;font-size:.9rem;color:var(--ink)">'+esc(c.name)+'</span>';
-      html+='<span class="fb-crit-badge '+cls+'" style="font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px">'+label+'</span>';
-      html+='</div>';
-      if(c.context) html+='<p style="font-size:.82rem;color:var(--ink-2);margin-bottom:8px;line-height:1.5">'+esc(c.context)+'</p>';
-      if(c.try_this) html+='<div style="background:#fff;border-radius:8px;padding:8px 12px;font-size:.82rem;color:var(--ink);line-height:1.5"><strong style="color:var(--navy)">Try this:</strong> '+esc(c.try_this)+'</div>';
-      if(!c.context&&!c.try_this&&c.note) html+='<p style="font-size:.82rem;color:var(--ink-3)">'+esc(c.note)+'</p>';
-      html+='</div>';
     });
-  }
-  html+='</div>';
-  return html;
-}
-
-// ── Render NZQA back-engineered feedback report (inline) ───────
-function renderNzqaReport(result, standardName){
-  if(!result||!result.matched||!result.matched.length) return '';
-
-  const stdLabels={
-    'Writing':'US32405 — Writing',
-    'Reading':'US32403 — Reading',
-    'Numeracy':'US32406 — Numeracy'
-  };
-  const stdLabel=stdLabels[standardName]||standardName;
-
-  const redCount=result.matched.filter(m=>m.color==='red').length;
-  const overallBadge=redCount>=2?'Gaps to close':'Almost there';
-
-  let html='<div class="nzqa-report">';
-
-  // Header
-  html+='<div class="nzqa-report-head">';
-  html+='<div class="nzqa-report-left">';
-  html+='<div class="nzqa-report-eyebrow">NZQA Feedback Report — '+esc(stdLabel)+'</div>';
-  html+='<div class="nzqa-report-title">Where your marks are slipping</div>';
-  html+='<div class="nzqa-report-sub">Based on the skills you practised in this session. Work through each area below before your next attempt.</div>';
-  html+='</div>';
-  html+='<span class="nzqa-report-badge">'+esc(overallBadge)+'</span>';
-  html+='</div>';
-
-  // Criteria cards
-  html+='<div class="nzqa-criteria-list">';
-  result.matched.forEach(entry=>{
-    const colorCls='is-'+entry.color;
-    const badgeCls='nzqa-badge-'+entry.color;
-    const badgeLabel=entry.color==='red'?'Needs work':'Almost there';
-    html+='<div class="nzqa-crit-item '+colorCls+'">';
-    html+='<div class="nzqa-crit-row">';
-    html+='<span class="nzqa-crit-name">'+esc(entry.title)+'</span>';
-    html+='<span class="nzqa-badge '+badgeCls+'">'+badgeLabel+'</span>';
-    html+='</div>';
-    html+='<p class="nzqa-tip">'+esc(entry.feedback)+'</p>';
-    html+='</div>';
-  });
-  html+='</div>';
-
-  // Overall summary
-  const focusedOn=result.matched.map(m=>m.title).join(', ');
-  html+='<div class="nzqa-overall"><strong>What to do next:</strong> Focus on '+esc(focusedOn)+'. Each session you complete builds your skills toward the 5 credits you need.</div>';
-
-  html+='</div>';
-  return html;
-}
-
-function renderPracticePlan(standardName,mappedSkills,idx){
-  const plan=PRACTICE_PLANS[standardName]||PRACTICE_PLANS.Reading;
-  const focus=mappedSkills.filter(s=>s!=='Looking good ✅').slice(0,2);
-  let focusedDesc;
-  if(focus.length===1){
-    focusedDesc=plan.focused[focus[0]]||plan.focused._default;
-  }else if(focus.length>=2){
-    const d1=plan.focused[focus[0]]||plan.focused._default;
-    const d2=plan.focused[focus[1]]||plan.focused._default;
-    focusedDesc=d1===d2?d1:d1+'<br><br><strong>Then:</strong> '+d2;
-  }else{
-    focusedDesc=plan.focused._default;
-  }
-
-  let h='<div class="practice-plan-card">';
-  h+='<button class="plan-toggle" onclick="togglePlan('+idx+')">📋 Your 45-minute practice plan ▾</button>';
-  h+='<div class="plan-body" id="plan-'+idx+'">';
-  h+='<div class="plan-step"><div class="plan-time">0–10 min: Warm-up</div><p class="plan-desc">'+plan.warmup+'</p></div>';
-  h+='<div class="plan-step"><div class="plan-time">10–30 min: Focused practice</div><p class="plan-desc">'+focusedDesc+'</p></div>';
-  h+='<div class="plan-step"><div class="plan-time">30–40 min: Apply it</div><p class="plan-desc">'+plan.apply+'</p></div>';
-  h+='<div class="plan-step"><div class="plan-time">40–45 min: Review</div><p class="plan-desc">'+plan.review+'</p></div>';
-  h+='</div></div>';
-  return h;
-}
-
-window.toggleFb=function(idx){
-  const el=$('fb-'+idx);if(!el) return;
-  const btn=el.previousElementSibling;
-  el.classList.toggle('open');
-  if(btn) btn.textContent=el.classList.contains('open')?'Hide details':'Show feedback details';
-};
-
-window.togglePlan=function(idx){
-  const el=$('plan-'+idx);if(!el) return;
-  const btn=el.previousElementSibling;
-  el.classList.toggle('open');
-  if(btn) btn.textContent=el.classList.contains('open')?'📋 Your 45-minute practice plan ▴':'📋 Your 45-minute practice plan ▾';
-};
-
-// ── Inline Feedback Report ─────────────────────────────────────
-let _fbFetched=false;
-
-function showFeedbackReport(){
-  const sec=$('inline-feedback-section');
-  sec.style.display='block';
-  // Slight delay so display:block has painted before scrolling
-  requestAnimationFrame(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}));
-  if(!_fbFetched){
-    const email=($('email-input').value||'').trim()||localStorage.getItem('passit_email')||'';
-    if(email) fetchFeedbackReport(email);
-  }
-}
-
-function hideFeedbackReport(){
-  $('inline-feedback-section').style.display='none';
-}
-
-async function fetchFeedbackReport(email){
-  // Reset inner state
-  $('fb-loading').style.display='block';
-  $('fb-report-list').innerHTML='';
-  $('fb-state-allgood').style.display='none';
-  $('fb-state-noskills').style.display='none';
-
-  try{
-    const url=SUPABASE_URL+'/rest/v1/practice_sessions'
-      +'?student_email=eq.'+encodeURIComponent(email)
-      +'&or=(score_pct.eq.0,score_pct.is.null)'
-      +'&weak_skills=not.is.null'
-      +'&order=session_date.desc&limit=50';
-
-    const res=await fetch(url,{headers:{apikey:SUPABASE_ANON,Authorization:'Bearer '+SUPABASE_ANON}});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const rows=await res.json();
-    $('fb-loading').style.display='none';
-
-    // Client-side filter: weak_skills must parse to non-empty array with LOOKUP matches
-    const actionable=rows.filter(s=>{
-      let ws=s.weak_skills;
-      if(typeof ws==='string'){try{ws=JSON.parse(ws);}catch(e){ws=[];}}
-      return Array.isArray(ws)&&ws.length>0&&backEngineerFeedback(ws,String(s.standard||''));
-    });
-
-    if(!actionable.length){
-      $('fb-state-allgood').style.display='block';
-      _fbFetched=true;
-      return;
-    }
-
-    const list=$('fb-report-list');
-    actionable.forEach(s=>{
-      const stdKey=String(s.standard||'');
-      const standardName=STD_MAP[stdKey]||stdKey;
-      const chipCls=stdKey==='32403'?'chip-blue':stdKey==='32405'?'chip-green':stdKey==='32406'?'chip-amber':'chip-gray';
-      let ws=s.weak_skills;
-      if(typeof ws==='string'){try{ws=JSON.parse(ws);}catch(e){ws=[];}}
-      const result=backEngineerFeedback(ws,stdKey);
-      if(!result) return;
-
-      let html='<div class="inline-fb-session">';
-      html+='<div class="inline-fb-session-meta">';
-      html+='<span class="chip '+chipCls+'">'+esc(standardName)+'</span>';
-      html+='<span class="session-date">'+esc(s.session_date?fmtDate(s.session_date):'—')+'</span>';
-      html+='</div>';
-      html+=renderNzqaReport(result,standardName);
-      html+='</div>';
-      list.insertAdjacentHTML('beforeend',html);
-    });
-
-    _fbFetched=true;
-  }catch(err){
-    console.error('Feedback fetch failed:',err);
-    $('fb-loading').style.display='none';
-    $('fb-state-noskills').style.display='block';
-  }
-}
-
-$('email-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search();}});
-$('search-btn').addEventListener('click',search);
-
-const saved=(localStorage.getItem('passit_email')||'').trim();
-if(saved) $('email-input').value=saved;
-
-async function search(){
-  const email=$('email-input').value.trim();
-  if(!email||!email.includes('@')) return;
-
-  $('search-btn').disabled=true;
-  $('search-btn').textContent='Searching…';
-  $('loading').style.display='block';
-  $('summary').style.display='none';
-  $('sessions-list').innerHTML='';
-  $('empty').style.display='none';
-  $('sim-link-wrap').style.display='none';
-  // Reset inline feedback panel so a new search re-fetches
-  $('inline-feedback-section').style.display='none';
-  $('fb-report-list').innerHTML='';
-  _fbFetched=false;
-
-  try{
-    const url=SUPABASE_URL+'/rest/v1/practice_sessions?student_email=eq.'+encodeURIComponent(email)+'&order=session_date.desc&limit=100';
-    const res=await fetch(url,{headers:{apikey:SUPABASE_ANON,Authorization:'Bearer '+SUPABASE_ANON}});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const rows=await res.json();
-    $('loading').style.display='none';
-
-    if(!rows.length){$('empty').style.display='block';return;}
-
-    $('meta-count').textContent=rows.length;
-    $('meta-email').textContent=email;
-    const dates=rows.map(r=>new Date(r.session_date)).filter(d=>!isNaN(d));
-    if(dates.length){
-      const fmt=d=>d.toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric'});
-      const oldest=fmt(new Date(Math.min(...dates)));
-      const newest=fmt(new Date(Math.max(...dates)));
-      $('meta-range').textContent=oldest===newest?newest:oldest+' — '+newest;
-    }
-    $('summary').style.display='block';
-
-    const list=$('sessions-list');
-    rows.forEach((s,i)=>{
-      const stdKey=String(s.standard||'');
-      const standardName=STD_MAP[stdKey]||s.standard||'Unknown';
-      const stdCls=stdKey==='32403'?'std-reading':stdKey==='32405'?'std-writing':stdKey==='32406'?'std-numeracy':'';
-      const chipCls=stdKey==='32403'?'chip-blue':stdKey==='32405'?'chip-green':stdKey==='32406'?'chip-amber':'';
-
-      let ws=s.weak_skills;
-      if(typeof ws==='string'){try{ws=JSON.parse(ws);}catch(e){ws=[];}}
-      const mappedSkills=mapWeakSkills(ws);
-
-      const failed=isMarkingFailed(s);
-      const fb=parseFeedback(s.feedback_json);
-      const hasWeakSkills=Array.isArray(ws)&&ws.length>0;
-
-      // Build back-engineered feedback for unscored sessions with weak_skills
-      const backResult=(failed&&hasWeakSkills)?backEngineerFeedback(ws,stdKey):null;
-
-      let html='<div class="session-card '+stdCls+'">';
-
-      // Session header row
-      html+='<div class="session-header">';
-      html+='<span class="session-date">'+esc(s.session_date?fmtDate(s.session_date):'—')+'</span>';
-      html+='<span class="chip '+chipCls+'">'+esc(standardName)+'</span>';
-      if(!failed){
-        html+=scoreChip(s.score_pct);
-      }else if(backResult){
-        html+=scoreChip(backResult.score_pct);
-      }
-      html+='</div>';
-
-      // Skill tags
-      html+='<div class="session-skills">';
-      mappedSkills.forEach(label=>{html+='<span class="skill-tag">'+esc(label)+'</span>';});
-      html+='</div>';
-
-      // Feedback section
-      if(fb){
-        // Properly marked session — show collapsible feedback
-        html+='<div class="session-feedback">'+renderFeedbackHTML(fb,i)+'</div>';
-      }else if(backResult){
-        // Unscored session with weak_skills — show inline NZQA report
-        html+=renderNzqaReport(backResult,standardName);
-      } else if(false){
+    if(!matched.length) return null;
+    return {matched, score_pct:null};
+    if(false){
     html+='<div class="marking-failed-box">ℹ️ <strong>Your session was recorded but marking failed.</strong> Your feedback has been sent to your email.</div>';
       }
 
@@ -934,3 +597,4 @@ async function search(){
 </script>
 </body>
 </html>
+
