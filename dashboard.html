@@ -637,15 +637,22 @@ function renderFeedbackHTML(fb,idx){
   if(!fb) return '';
   let html='<button class="fb-toggle" onclick="toggleFb('+idx+')">Show feedback details</button>';
   html+='<div class="fb-detail" id="fb-'+idx+'">';
-  if(fb.criteria&&Array.isArray(fb.criteria)){
+  if(fb.overall) html+='<div style="margin-bottom:12px;font-weight:600;font-size:.95rem;color:var(--ink)">'+esc(fb.overall)+'</div>';
+  if(fb.criteria&&Array.isArray(fb.criteria)&&fb.criteria.length){
     fb.criteria.forEach(c=>{
       const cls=c.verdict==='met'?'fb-met':c.verdict==='partial'?'fb-partial':'fb-miss';
-      const label=c.verdict==='met'?'Met':c.verdict==='partial'?'Partial':'Missing';
-      html+='<div class="fb-crit"><span>'+esc(c.name)+'</span><span class="fb-crit-badge '+cls+'">'+label+'</span></div>';
-      if(c.note) html+='<div style="font-size:.75rem;color:var(--ink-3);padding:0 0 6px">'+esc(c.note)+'</div>';
+      const label=c.verdict==='met'?'✅ Looking good':c.verdict==='partial'?'🟡 Almost there':'🔴 Needs work';
+      html+='<div class="fb-crit" style="margin-bottom:14px;padding:12px 14px;background:var(--sky);border-radius:10px;border-left:3px solid '+(c.verdict==='met'?'var(--green)':c.verdict==='partial'?'var(--amber)':'var(--red)')+'">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
+      html+='<span style="font-weight:700;font-size:.9rem;color:var(--ink)">'+esc(c.name)+'</span>';
+      html+='<span class="fb-crit-badge '+cls+'" style="font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px">'+label+'</span>';
+      html+='</div>';
+      if(c.context) html+='<p style="font-size:.82rem;color:var(--ink-2);margin-bottom:8px;line-height:1.5">'+esc(c.context)+'</p>';
+      if(c.try_this) html+='<div style="background:#fff;border-radius:8px;padding:8px 12px;font-size:.82rem;color:var(--ink);line-height:1.5"><strong style="color:var(--navy)">Try this:</strong> '+esc(c.try_this)+'</div>';
+      if(!c.context&&!c.try_this&&c.note) html+='<p style="font-size:.82rem;color:var(--ink-3)">'+esc(c.note)+'</p>';
+      html+='</div>';
     });
   }
-  if(fb.overall) html+='<div style="margin-top:6px;font-weight:600">'+esc(fb.overall)+'</div>';
   html+='</div>';
   return html;
 }
