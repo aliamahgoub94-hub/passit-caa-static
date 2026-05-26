@@ -606,6 +606,23 @@ function backEngineerFeedback(weakSkills, standard){
 
       html+=renderPracticePlan(standardName,mappedSkills,i);
       html+='</div>';
+
+      // Add inline feedback below missing skills
+      if(backResult&&backResult.matched&&backResult.matched.length){
+        let fbHtml='<div style="margin-top:16px;padding:16px 20px;background:#f8faff;border-radius:12px;border:1px solid #c8d8ee">';
+        fbHtml+='<div style="font-size:.78rem;font-weight:700;color:#6b7a96;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px">Where to focus before your exam</div>';
+        backResult.matched.forEach(m=>{
+          const col=m.color==='red'?'#C0392B':m.color==='amber'?'#D68910':'#0F6E56';
+          const bg=m.color==='red'?'#fceae8':m.color==='amber'?'#fdf4dc':'#e6f4f0';
+          fbHtml+='<div style="margin-bottom:12px;padding:12px 16px;background:'+bg+';border-radius:10px;border-left:3px solid '+col+'">';
+          fbHtml+='<div style="font-size:.88rem;font-weight:700;color:'+col+';margin-bottom:4px">'+esc(m.title)+'</div>';
+          fbHtml+='<div style="font-size:.83rem;color:#3d4f6f;line-height:1.6">'+esc(m.feedback)+'</div>';
+          fbHtml+='</div>';
+        });
+        fbHtml+='</div>';
+        list.insertAdjacentHTML('beforeend',fbHtml);
+      }
+
       list.insertAdjacentHTML('beforeend',html);
     });
 
