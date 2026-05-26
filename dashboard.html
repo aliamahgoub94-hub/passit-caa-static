@@ -532,47 +532,75 @@ const FEEDBACK_LOOKUP=[
 // ── Back-engineer feedback from weak_skills ───────────────────
 function backEngineerFeedback(weakSkills, standard){
     if(!Array.isArray(weakSkills)||!weakSkills.length) return null;
-    const SKILL_FEEDBACK={
-      "gst & percentages":{title:"Working with percentages",feedback:"Percentages appear in GST, discounts, and wages. To find 15% multiply by 0.15. Always show your working.",color:"red"},
-      "addition & subtraction":{title:"Number operations",feedback:"Many errors here are calculator input mistakes. Write the equation out before pressing buttons and check your answer makes sense.",color:"amber"},
-      "perimeter and rates":{title:"Rates and measurement",feedback:"Rates questions ask how much per unit. Set them up as fractions: distance divided by time equals speed. Always label your units.",color:"red"},
-      "rates, time, and timetables":{title:"Rates and timetables",feedback:"Read timetable questions carefully. Check AM vs PM and whether the question asks for arrival or departure time.",color:"red"},
-      "measurement and proportions":{title:"Measurement and proportions",feedback:"Proportions compare two quantities. Set them up as equivalent fractions and cross-multiply. Check your units match before you start.",color:"amber"},
-      "speed, distance, time":{title:"Speed, distance, time",feedback:"Use the triangle: Speed equals Distance divided by Time. Cover what you want to find. Check your units match.",color:"red"},
-      "unit conversion":{title:"Unit conversion",feedback:"Write the conversion factor first. 1 km equals 1000 m. Multiply to go from big to small units, divide to go from small to big.",color:"red"},
-      "fractions and decimals":{title:"Fractions and decimals",feedback:"To convert a fraction to a decimal divide the top by the bottom. For percentages multiply by 100.",color:"amber"},
-      "statistics and probability":{title:"Data and probability",feedback:"Read carefully. Count the total outcomes first then the favourable ones. Check if the answer should be a fraction, decimal, or percentage.",color:"amber"},
-      "main idea":{title:"Finding the main idea",feedback:"The main idea is usually in the first or last sentence of a paragraph. Ask: what is this whole text mostly about?",color:"red"},
-      "inference":{title:"Reading between the lines",feedback:"Inference means using clues in the text plus what you know. The answer will not be stated directly. Look for what the author implies.",color:"red"},
-      "vocabulary in context":{title:"Word meaning in context",feedback:"Do not guess from the word alone. Read the whole sentence around it. Eliminate options that do not fit the context.",color:"amber"},
-      "text structure":{title:"How the text is organised",feedback:"Notice signal words: however, therefore, firstly, as a result. These show how ideas connect.",color:"amber"},
-      "purpose and audience":{title:"Purpose and audience",feedback:"Ask who this is written for and why. Formal texts use professional language. The purpose shapes every word choice.",color:"red"},
-      "customer communication":{title:"Tone and word choices",feedback:"Your writing needs to sound professional. Swap casual words: get to obtain, tell to inform, need to require.",color:"red"},
-      "procedural instructions":{title:"How your writing flows",feedback:"Use linking words: First, Then, Next, Finally. One idea per step. Number your steps if the order matters.",color:"amber"},
-      "formal language":{title:"Formal writing style",feedback:"Avoid contractions, slang, and first person unless instructed. Use complete sentences and check your punctuation.",color:"red"}
-    };
+    const std=String(standard||'');
     const matched=[];
     const seen=new Set();
     weakSkills.forEach(raw=>{
-      const k=String(raw||"").toLowerCase().trim();
-      if(!k) return;
-      if(SKILL_FEEDBACK[k]&&!seen.has(k)){
-        seen.add(k);
-        matched.push({...SKILL_FEEDBACK[k],name:raw});
-        return;
+      const k=String(raw||'').toLowerCase().trim();
+      if(!k||seen.has(k)) return;
+      seen.add(k);
+      let entry=null;
+      if(std==='32406'||std==='numeracy'){
+        if(k.includes('gst')||k.includes('percentage')||k.includes('percent'))
+          entry={title:'Working with percentages',feedback:'Percentage questions appear in almost every CAA Numeracy session. For GST: multiply by 1.15 to add it, divide by 1.15 to remove it. Always write out each step — NZQA awards marks for working, not just the answer.',color:'red'};
+        else if(k.includes('rate')||k.includes('speed')||k.includes('distance')||k.includes('timetable')||k.includes('time'))
+          entry={title:'Rates, speed and time',feedback:'Rate questions involve two units changing together. Identify both units first, then set up a ratio. Always include units in your answer. For time: remember time does not work in base 10 — 1.5 hours is 1 hour 30 minutes.',color:'red'};
+        else if(k.includes('area')||k.includes('perimeter'))
+          entry={title:'Area and perimeter',feedback:'Sketch the shape first and label the dimensions. Area = length x width for rectangles. Perimeter = add all sides. If the question asks for cost, multiply area by the rate. Check your units at every step.',color:'amber'};
+        else if(k.includes('ratio')||k.includes('proportion'))
+          entry={title:'Ratios and proportions',feedback:'Find the value of one part first, then multiply. For a ratio of 3:2 sharing $150: total parts = 5, one part = $30, so the split is $90 and $60. Practise until the method feels automatic.',color:'amber'};
+        else if(k.includes('conversion')||k.includes('unit'))
+          entry={title:'Unit conversion',feedback:'Write the conversion factor before you calculate. 1 km = 1000 m. To go from metres to km, divide by 1000. Draw an arrow — smaller unit needs a bigger number.',color:'red'};
+        else if(k.includes('addition')||k.includes('subtraction')||k.includes('multi')||k.includes('step'))
+          entry={title:'Number operations',feedback:'Many errors here are calculator input mistakes. Write the equation out before pressing buttons. For multi-step questions, write each step on a new line and label what you are finding — NZQA awards partial marks for clear working.',color:'amber'};
+        else if(k.includes('mean')||k.includes('average')||k.includes('statistic')||k.includes('probability'))
+          entry={title:'Data and probability',feedback:'For mean: add all values and divide by how many there are. NZQA sometimes asks you to find a missing value when you know the mean — work backwards from the total. For probability, count total outcomes first.',color:'amber'};
+        else if(k.includes('fraction')||k.includes('decimal'))
+          entry={title:'Fractions and decimals',feedback:'To convert a fraction to a decimal, divide the top by the bottom. To get a percentage, multiply by 100. Practise moving fluently between all three forms.',color:'amber'};
+        else if(k.includes('budget')||k.includes('money')||k.includes('cost')||k.includes('best value'))
+          entry={title:'Working with money',feedback:'Calculate both options to the same unit — cost per 100g, or cost per year. State which is better and by how much. Show your working clearly.',color:'amber'};
+        else
+          entry={title:'Numeracy skill to practise',feedback:'This skill came up in your session. NZQA markers look for accurate calculation, clear working, and correct units. Write out each step and check your answer makes sense in context.',color:'amber'};
+      } else if(std==='32403'||std==='reading'){
+        if(k.includes('purpose')||k.includes('audience')||k.includes('intent')||k.includes('bias')||k.includes('comparing texts')||k.includes('writer'))
+          entry={title:'Purpose and audience',feedback:"Purpose and audience questions are about why a text was written and who it was written for. Ask: what does the writer want the reader to DO or THINK? Quote a specific part of the text that shows you the purpose.",color:'red'};
+        else if(k.includes('inference')||k.includes('implied')||k.includes('cause')||k.includes('reading between'))
+          entry={title:'Reading between the lines',feedback:"Inference means the answer is not stated directly — you have to read between the lines. Find the clue in the text, state what it suggests, explain the connection: 'The text says X, which suggests Y because Z.'",color:'red'};
+        else if(k.includes('locate')||k.includes('retrieval')||k.includes('specific information')||k.includes('multi-part')||k.includes('locating'))
+          entry={title:'Finding specific information',feedback:'Go back and find the exact sentence or phrase that answers the question. For multi-part questions, answer every part — a partially answered question loses marks even if what you wrote is correct.',color:'red'};
+        else if(k.includes('compare')||k.includes('contrast')||k.includes('contradiction')||k.includes('comparing'))
+          entry={title:'Comparing ideas and texts',feedback:"Use a clear structure: 'Text A says [X]. Text B says [Y]. These agree/disagree because [Z].' Find the specific point of comparison — not a general summary of both texts.",color:'amber'};
+        else if(k.includes('vocabulary')||k.includes('word meaning')||k.includes('language'))
+          entry={title:'Word meaning in context',feedback:"Do not guess from the word alone. Read the whole sentence around it. Try replacing the word with a simpler option and check the sentence still makes sense. Eliminate options that do not fit.",color:'amber'};
+        else if(k.includes('structure')||k.includes('organisation')||k.includes('text feature'))
+          entry={title:'How the text is organised',feedback:"Notice signal words: however, therefore, firstly, as a result. These show how ideas connect and reveal the author's structure. Ask: is this text persuading, informing, or instructing?",color:'amber'};
+        else if(k.includes('main idea')||k.includes('summarise')||k.includes('summary'))
+          entry={title:'Finding the main idea',feedback:'The main idea is usually in the first or last sentence of a paragraph. Ask: what is this whole text mostly about? Ignore supporting details when answering main idea questions.',color:'red'};
+        else if(k.includes('timetable')||k.includes('practical')||k.includes('application'))
+          entry={title:'Practical text reading',feedback:'Read practical texts like timetables and notices carefully — check AM vs PM, column headings, and footnotes. Answer exactly what was asked, not what is nearby on the page.',color:'amber'};
+        else
+          entry={title:'Reading skill to practise',feedback:'NZQA Reading questions test whether you can locate information, understand purpose, read between the lines, and compare ideas. Go back to the text for every answer — do not rely on memory.',color:'amber'};
+      } else if(std==='32405'||std==='writing'){
+        if(k.includes('tone')||k.includes('word choice')||k.includes('formal')||k.includes('customer')||k.includes('email')||k.includes('business')||k.includes('workplace'))
+          entry={title:'Your tone and word choices',feedback:'This is the most important area to practise. The marker looks at whether your writing sounds right for the situation — formal when it needs to be formal, professional throughout. Swap casual words: get→obtain, tell→inform, need→require. Read it back — would you say this in a workplace?',color:'red'};
+        else if(k.includes('flow')||k.includes('procedural')||k.includes('sequential')||k.includes('instruction')||k.includes('structure'))
+          entry={title:'How your writing flows',feedback:'The marker checks whether your writing is easy to follow from beginning to end. Use linking words: First, Then, Next, After that, Finally. One idea per step. Read it back — could someone follow this without asking questions?',color:'amber'};
+        else if(k.includes('ideas')||k.includes('content')||k.includes('detail')||k.includes('develop'))
+          entry={title:'Your ideas and content',feedback:'NZQA markers want specific, relevant detail — not general statements. After you write, ask: have I given enough detail that someone who knows nothing about this situation would fully understand? Avoid vague phrases — spell it out.',color:'amber'};
+        else if(k.includes('spelling')||k.includes('grammar')||k.includes('punctuation'))
+          entry={title:'Spelling, grammar and punctuation',feedback:'Proofread out loud — you catch more errors that way. Check: tenses stay consistent throughout, every sentence has a subject and a verb, apostrophes are correct. This is already a strength for many students — keep it that way.',color:'amber'};
+        else if(k.includes('report')||k.includes('incident')||k.includes('notice')||k.includes('community'))
+          entry={title:'Writing for a specific purpose',feedback:'Workplace reports need factual, objective writing in sequence. Notices need the key information up front. Structure: what, when, where, who, what was done. Use past tense for reports. Avoid opinion.',color:'red'};
+        else
+          entry={title:'Writing skill to practise',feedback:'NZQA assesses writing across four areas: ideas and content, tone and word choices, how your writing flows, and spelling and grammar. Write a practice response, read it back out loud, and fix one area at a time.',color:'amber'};
+      } else {
+        entry={title:'Skill to practise',feedback:'This skill came up in your session. Practise it before the exam — NZQA markers will be looking for it specifically.',color:'amber'};
       }
-      for(const [key,val] of Object.entries(SKILL_FEEDBACK)){
-        if(seen.has(key)) continue;
-        if(k.includes(key)||key.includes(k)){
-          seen.add(key);
-          matched.push({...val,name:raw});
-          break;
-        }
-      }
+      if(entry) matched.push({...entry,name:raw});
     });
     if(!matched.length) return null;
     return {matched, score_pct:null};
-    if(false){
+    const SKILL_FEEDBACK={
     html+='<div class="marking-failed-box">ℹ️ <strong>Your session was recorded but marking failed.</strong> Your feedback has been sent to your email.</div>';
       }
 
